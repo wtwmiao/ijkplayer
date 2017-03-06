@@ -20,7 +20,9 @@
 #import "IJKCommon.h"
 #import "IJKDemoHistory.h"
 
-@implementation IJKVideoViewController
+@implementation IJKVideoViewController{
+    NSTimer *_logTimer;
+}
 
 - (void)dealloc
 {
@@ -74,7 +76,7 @@
     // [IJKFFMoviePlayerController checkIfPlayerVersionMatch:YES major:1 minor:0 micro:0];
 
     IJKFFOptions *options = [IJKFFOptions optionsByDefault];
-
+    [options setPlayerOptionIntValue:1     forKey:@"framedrop"];
     self.player = [[IJKFFMoviePlayerController alloc] initWithContentURL:self.url withOptions:options];
     self.player.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     self.player.view.frame = self.view.bounds;
@@ -86,6 +88,9 @@
     [self.view addSubview:self.mediaControl];
 
     self.mediaControl.delegatePlayer = self.player;
+    
+    _logTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self
+                                                              selector:@selector(updateTrackPostion:) userInfo:nil repeats:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -118,6 +123,19 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark timer
+-(void)updateTrackPostion:(id) userdate{
+    
+    NSTimeInterval duration = self.player.duration;
+    NSInteger      intDuration = duration + 0.5;
+    
+    NSTimeInterval curPlayTs = self.player.currentPlaybackTime;
+    
+    NSLog(@"cur paly ts  = %f totalts = %ld",curPlayTs,intDuration);
+
+}
+
+
 #pragma mark IBAction
 
 - (IBAction)onClickMediaControl:(id)sender
@@ -149,12 +167,15 @@
 {
     [self.player play];
     [self.mediaControl refreshMediaControl];
+    
+    [_logTimer setFireDate:[NSDate date]];
 }
 
 - (IBAction)onClickPause:(id)sender
 {
     [self.player pause];
     [self.mediaControl refreshMediaControl];
+    [_logTimer setFireDate:[NSDate distantFuture]];
 }
 
 - (IBAction)didSliderTouchDown

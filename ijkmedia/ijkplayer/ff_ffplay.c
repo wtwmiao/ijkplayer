@@ -3736,6 +3736,7 @@ long ffp_get_current_position_l(FFPlayer *ffp)
         pos = pos_clock * 1000;
     }
 
+    av_log(ffp, AV_LOG_ERROR, "--------------- start_time %lld pos_clock %lf \n", start_time, pos_clock);
     // If using REAL time and not ajusted, then return the real pos as calculated from the stream
     // the use case for this is primarily when using a custom non-seekable data source that starts
     // with a buffer that is NOT the start of the stream.  We want the get_current_position to

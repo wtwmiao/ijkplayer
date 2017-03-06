@@ -59,6 +59,8 @@
             [_files addObject:fileName];
         }
     }
+    
+    [_files addObject:@"shit"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -122,9 +124,11 @@
             [self.navigationController pushViewController:viewController animated:YES];
         } break;
         case 1: {
-            NSString *fileName = [_folderPath stringByAppendingPathComponent:_files[indexPath.row]];
+          //  NSString *fileName = [_folderPath stringByAppendingPathComponent:_files[indexPath.row]];
 
-            fileName = [fileName stringByStandardizingPath];
+           // fileName = [fileName stringByStandardizingPath];
+            
+             NSString *fileName = [[NSBundle mainBundle] pathForResource:@"cut_12" ofType:@"mp4"];
             
             [IJKVideoViewController presentFromViewController:self withTitle:[NSString stringWithFormat:@"File: %@", fileName] URL:[NSURL fileURLWithPath:fileName] completion:^{
             }];
